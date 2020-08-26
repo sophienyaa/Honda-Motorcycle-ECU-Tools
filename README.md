@@ -17,7 +17,7 @@ The connector itself is a Sumitomo 6187-4441 and has the following 4 pins
 
 *plug image here*
 
-In order to read data from it, we need to connect to the K-Line. The K-Line is a single wire communicaton standard, it is esentially half-duplex serial (device can only send or recieve, not both at the same time)
+In order to read data from it, we need to connect to the K-Line. The K-Line is a single wire communicaton standard, it is esentially half-duplex serial (device can only send or recieve, not both at the same time) running at 10,400 baud.
 
 Honda's implementation at a hardware level seems to be standard ISO9141, however it does not use a standard protocol. This means you can use a standard ISO9141 Interface chip, such as the L9637D (which is what I have used). You then need a microcontroller to read the data, as normal OBDII chips like the ELM327 are incompatable.
 
