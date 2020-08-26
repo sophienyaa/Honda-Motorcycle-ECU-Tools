@@ -18,24 +18,11 @@ void setup() {
 }
 
 void loop() {
-  //scanECUTables();
-
   showDataTable11();
-
-  /*
-  byte data[] = {0x72, 0x05, 0x71, 0xD1};
-  int chk = calcChecksum(data, sizeof(data));
-  byte dataWithChk[] = {0x72, 0x05, 0x71, 0xD1, chk};
-
-  bike.write(dataWithChk, sizeof(dataWithChk));
-  delay(50);
-
-  bufferECUResponse();*/
-
-  
-  delay(500);
+  showDataTableD1();  
 }
 
+//Shows most other info
 void showDataTable11() {
 
   byte data[] = {0x72, 0x05, 0x71, 0x11};
@@ -59,18 +46,17 @@ void showDataTable11() {
     }
   }
   debug.println();  
- /*
+
   //RPM - 8/9
   debug.print("RPM: ");
   int rpm = (uint16_t) (buff[8] << 8) + buff[9];
   debug.print(rpm);
-
-  debug.println();
+  debug.print(" ");
 
   debug.print("TPS V: ");
   int tpsv = calcValueDivide256(buff[10]);
   debug.print(tpsv);
-  debug.println();
+  debug.print(" ");
 
   debug.print("TPS %: ");
   int tpsp = calcValueDivide16(buff[11]);
@@ -116,61 +102,48 @@ void showDataTable11() {
   int spdk = buff[21];
   debug.print(spdk);
   debug.print(" ");
-*/
-  debug.print("?? 24 ");
-  int uk1 = buff[24];
-  debug.print(uk1);
-  debug.print(" ");
-
-  debug.print("?? 25 ");
-  int uk2= buff[225];
-  debug.print(uk2);
-  debug.print(" ");
-
-  debug.print("?? 26 ");
-  int uk3 = buff[26];
-  debug.print(uk3);
-  debug.print(" ");
-
-  debug.print("?? 27 ");
-  int uk4 = buff[27];
-  debug.print(uk4);
-  debug.print(" ");
 
   debug.println();
+}
 
-
+//Shows info like neutral switch, engine on
+void showDataTableD1{ 
+  byte data[] = {0x72, 0x05, 0x71, 0xD1};
+  int chk = calcChecksum(data, sizeof(data));
+  byte dataWithChk[] = {0x72, 0x05, 0x71, 0xD1, chk};
   
+  bike.write(dataWithChk, sizeof(dataWithChk));
+  delay(50);
   
-  /*
-   * 00 - 0000rpm
-00 - 0000rpm
-1B TPS Volt - 0
-00 TPS - 0
-9E ECT Volt - 3v Coolant
-3D ECT Deg - 21c Coolant
-9E IAT Volt - 3v Air
-3D IAT Deg - 21c Air
-93 MAP Volt - 2v 
-64 MAP Kpa - 100kpa
-FF ??
-FF ??
-69 Batt Volt - 10.5v
-0 Speed - 
-0 Fuel Inj
-0 Fuel Inj
-80 ??
-57 ??
-28 ??
-80 ??
-   */
+  int buffCount = 0;
+  byte buff[PACKET_BUFFER_SIZE];  
+  while ( (bike.available() > 0 ) && ( buffCount < PACKET_BUFFER_SIZE)) {
+  buff[buffCount++] = bike.read();
+  }
+  
+  debug.print("RAW: ");
+  for(int i=0; i<buffCount; i++) {
+    debug.print(buff[i], HEX);
+    if(i != buffCount-1) {
+        debug.print(";");  
+    }
+  }
+  debug.println();
 
+  debug.print("Switch State: ");
+  int sws = buff[7];
+  debug.print(sws);
+  debug.print(" ");
 
+  debug.print("Engine State: ");
+  int ens = buff[11];
+  debug.print(ens);
+  debug.print(" ");
+  
+  debug.println();
 
   
 }
-
-
 
 //Calc methods
 
