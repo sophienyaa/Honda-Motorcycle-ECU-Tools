@@ -19,7 +19,7 @@ The connector itself is a Sumitomo 6187-4441 and has the following 4 pins
 
 In order to read data from it, we need to connect to the K-Line. The K-Line is a single wire communicaton standard, it is esentially half-duplex serial (device can only send or recieve, not both at the same time) running at 10,400 baud.
 
-Honda's implementation at a hardware level seems to be standard ISO9141, however it does not use a standard protocol. This means you can use a standard ISO9141 Interface chip, such as the L9637D (which is what I have used). You then need a microcontroller to read the data, as normal OBDII chips like the ELM327 are incompatable.
+Honda's implementation at a hardware level seems to be standard ISO9141-2, however it does not use a standard protocol. This means you can use a standard ISO9141 Interface chip, such as the L9637D (which is what I have used). You then need a microcontroller (e.g Arduino) or computer (e.g Raspberry Pi) to read the data, as normal OBDII chips like the ELM327 are incompatable. If using a computuer, you will need a FTDI based USB > Serial adapter, as these support the non standard baud rate.
 
 Here is an example circut for use with an Arduino or similar.
 
