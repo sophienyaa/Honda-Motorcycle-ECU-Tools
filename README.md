@@ -1,6 +1,8 @@
 # Honda Motorcycle ECU Tools
 
-Here is my work (so far...) on reading data from my Honda CRF250L via its on board diagnostics port.
+Here is my work (so far...) on reading data from my Honda CRF250L via its on board diagnostics port. This information should be applicable to most "modern" (post ~2005 fuel injected Honda motorcycles.
+
+I am yet to test this on my VFR800, I will update when I have done so.
 
 ## Hardware
 
