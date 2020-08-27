@@ -1,11 +1,12 @@
-#include <SoftwareSerial.h>
+//#include <SoftwareSerial.h>
 
 #define debug Serial
+#define bike Serial2
 #define PACKET_BUFFER_SIZE (128)
-#define TX_PIN 3
-#define RX_PIN 2
+#define TX_PIN 17
+#define RX_PIN 16
 
-SoftwareSerial bike(RX_PIN, TX_PIN); // RX, TX
+//SoftwareSerial bike(RX_PIN, TX_PIN); // RX, TX
 
 byte ECU_WAKEUP_MESSAGE[] = {0xFE, 0x04, 0x72, 0x8C}; 
 byte ECU_INIT_MESSAGE[] = {0x72, 0x05, 0x00, 0xF0, 0x99};
@@ -49,57 +50,57 @@ void showDataTable11() {
 
   //RPM - 8/9
   debug.print("RPM: ");
-  int rpm = (uint16_t) (buff[8] << 8) + buff[9];
+  int rpm = (uint16_t) (buff[9] << 8) + buff[10];
   debug.print(rpm);
   debug.print(" ");
 
   debug.print("TPS V: ");
-  int tpsv = calcValueDivide256(buff[10]);
+  int tpsv = calcValueDivide256(buff[11]);
   debug.print(tpsv);
   debug.print(" ");
 
   debug.print("TPS %: ");
-  int tpsp = calcValueDivide16(buff[11]);
+  int tpsp = calcValueDivide16(buff[12]);
   debug.print(tpsp);
   debug.print(" ");
 
   debug.print("ECT V: ");
-  int ectv = calcValueDivide256(buff[12]);
+  int ectv = calcValueDivide256(buff[13]);
   debug.print(ectv);
   debug.print(" ");
 
   debug.print("ECT C: ");
-  int ectc = calcValueMinus40(buff[13]);
+  int ectc = calcValueMinus40(buff[14]);
   debug.print(ectc);
   debug.print(" ");
 
   debug.print("IAT V: ");
-  int iatv = calcValueDivide256(buff[14]);
+  int iatv = calcValueDivide256(buff[15]);
   debug.print(iatv);
   debug.print(" ");
 
   debug.print("IAT C: ");
-  int iatc = calcValueMinus40(buff[15]);
+  int iatc = calcValueMinus40(buff[16]);
   debug.print(iatc);
   debug.print(" ");
 
   debug.print("MAP V: ");
-  int mapv = calcValueDivide256(buff[16]);
+  int mapv = calcValueDivide256(buff[17]);
   debug.print(mapv);
   debug.print(" ");
 
   debug.print("MAP kPa: ");
-  int mapk = buff[17];
+  int mapk = buff[18];
   debug.print(mapk);
   debug.print(" ");
 
   debug.print("BATT V: ");
-  int batv = calcValueDivide10(buff[20]);
+  int batv = calcValueDivide10(buff[21]);
   debug.print(batv);
   debug.print(" ");
 
   debug.print("SPEED KMH ");
-  int spdk = buff[21];
+  int spdk = buff[22];
   debug.print(spdk);
   debug.print(" ");
 
@@ -107,7 +108,7 @@ void showDataTable11() {
 }
 
 //Shows info like neutral switch, engine on
-void showDataTableD1{ 
+void showDataTableD1() { 
   byte data[] = {0x72, 0x05, 0x71, 0xD1};
   int chk = calcChecksum(data, sizeof(data));
   byte dataWithChk[] = {0x72, 0x05, 0x71, 0xD1, chk};
@@ -119,7 +120,7 @@ void showDataTableD1{
   byte buff[PACKET_BUFFER_SIZE];  
   while ( (bike.available() > 0 ) && ( buffCount < PACKET_BUFFER_SIZE)) {
   buff[buffCount++] = bike.read();
-  }
+  } 
   
   debug.print("RAW: ");
   for(int i=0; i<buffCount; i++) {
@@ -131,12 +132,12 @@ void showDataTableD1{
   debug.println();
 
   debug.print("Switch State: ");
-  int sws = buff[7];
+  int sws = buff[9];
   debug.print(sws);
   debug.print(" ");
 
   debug.print("Engine State: ");
-  int ens = buff[11];
+  int ens = buff[13];
   debug.print(ens);
   debug.print(" ");
   
